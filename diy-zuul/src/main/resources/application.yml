@@ -1,0 +1,39 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8888/eureka/
+server:
+  port: 8769
+spring:
+  application:
+    name: diy-zuul
+zuul:
+  #解决跨域问题
+  #zuul加跨域，服务不加
+  #sensitive-headers: Access-Control-Allow-Origin,Access-Control-Allow-Methods
+  # 此处解决后端服务重定向导致用户浏览的 host 变成 后端服务的 host 问题
+  #add-host-header: true
+  routes:
+    api-a:
+      path: /diy-AnalysisService/**
+      service-id: diy-AnalysisService
+    api-b:
+      path: /diy-Order/**
+      service-id: diy-Order
+    api-c:
+      path: /diy-UserService/**
+      service-id: diy-UserService
+    api-d:
+      path: /diy-xuetang/**
+      service-id: xuetang
+  ratelimit:
+    enabled: true
+    policies:
+      api-a:
+        limit: 1
+        refresh-interval: 60
+        type: origin
+      api-b:
+        limit: 1
+        refresh-interval: 60
+        type: origin
